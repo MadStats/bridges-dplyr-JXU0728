@@ -63,11 +63,11 @@ dest= rep("", 52)
 for(i in 1:52) dest[i]=paste("https://www.fhwa.dot.gov/bridge/nbi/2016/delimited/", states[i,2],"16.txt", sep = "") 
 x16 = ldply(dest, fread, colClasses = classes)  
 
-
+save(x16,file = "allStates16.RData")
 # let's dig into the values and see if there are any crazy things going on...
 M = x16
-M = M[,-14]
-is.na(M) %>% rowSums %>% hist
+#M = M[,-14]
+is.na(M) %>% rowSums %>% hist # hist(rowSums(is.na(M)))
 is.na(M) %>% colSums %>% hist(breaks = 100)
 fun = function(x){ return(which(x>20)) }
 (bad =  is.na(M) %>% colSums %>% fun)
@@ -108,7 +108,7 @@ x = select(M, one_of(keep))  # see chapter 5 (section 4) in r4ds.
 
 wi = filter(x, STATE_CODE_001 == 55)
 wi
-library(ggplot2)
+
 ggplot(data = wi) +geom_point(mapping = aes(y = LAT_016, x = LONG_017))
 wi = filter(wi,LONG_017 > 0)
 ggplot(data = wi) +geom_point(mapping = aes(y = LAT_016, x = LONG_017))
